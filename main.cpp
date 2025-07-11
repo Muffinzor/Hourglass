@@ -67,8 +67,6 @@ int main() {
             timeSinceLastUpdate -= timePerUpdate;
 
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                float hue = Utility::random_int(45, 60);
-                sf::Color color = Utility::HSVtoRGB(hue, 1.0f, 1.0f);
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
                 for (int i = 0; i < GRAIN_MULTIPLIER; ++i) {
@@ -82,6 +80,8 @@ int main() {
                         && gridY >= 0 && gridY < GRID_HEIGHT
                         && grid.is_inside_hourglass(gridX, gridY)) {
                         if (grid.get(gridX, gridY) == nullptr && !grid.isWall[gridX][gridY]) {
+                            float hue = Utility::random_int(45, 60);
+                            sf::Color color = Utility::HSVtoRGB(hue, 1.0f, 1.0f);
                             grid.set(gridX, gridY, new Grain(color));
                             grains++;
                         }
