@@ -16,7 +16,7 @@ void Hourglass_Grid::initialize_walls() {
     int topMargin = static_cast<int>(height * 0.05f);
     int bottomMargin = static_cast<int>(height * 0.95f);
 
-    int thickness = 1;
+    int thickness = 2;
 
     // Walls
     for (int y = topMargin; y <= bottomMargin; ++y) {
@@ -47,7 +47,9 @@ void Hourglass_Grid::initialize_walls() {
             int floorX = x + offset;
             if (floorX >= 0 && floorX < width) {
                 isWall[topMargin][floorX] = true;
+                isWall[topMargin+1][floorX] = true;
                 isWall[bottomMargin][floorX] = true;
+                isWall[bottomMargin-1][floorX] = true;
             }
         }
     }
@@ -116,7 +118,7 @@ void Hourglass_Grid::updateCell(int x, int y) {
 
         for (int i = 0; i < fallDistance; ++i) {
             int nextY = currentY + 1;
-            if (nextY >= height || isWall[nextY][currentX]) {
+            if (nextY >= height) {
                 current->velocity = 1;
                 break;
             }
@@ -135,12 +137,10 @@ void Hourglass_Grid::updateCell(int x, int y) {
                     current->velocity = avg_velocity;
                 }
 
-                // Try sliding sideways up to maxSlide cells away
                 const int maxSlide = 2;
                 bool movedSideways = false;
 
                 for (int slideDist = 1; slideDist <= maxSlide && !movedSideways; ++slideDist) {
-                    // Try left
                     int tryX = currentX - slideDist;
                     if (tryX >= 0 && !isWall[nextY][tryX] && cells[nextY][tryX] == nullptr) {
                         cells[nextY][tryX] = current;
@@ -151,7 +151,6 @@ void Hourglass_Grid::updateCell(int x, int y) {
                         movedSideways = true;
                         break;
                     }
-                    // Try right
                     tryX = currentX + slideDist;
                     if (tryX < width && !isWall[nextY][tryX] && cells[nextY][tryX] == nullptr) {
                         cells[nextY][tryX] = current;
@@ -165,7 +164,7 @@ void Hourglass_Grid::updateCell(int x, int y) {
                 }
 
                 if (!movedSideways) {
-                    // Can't slide sideways, break loop
+                    current->velocity = 1;
                     break;
                 }
             }

@@ -5,7 +5,7 @@
 const int CELL_SIZE = 2;
 const int GRID_WIDTH = 400;
 const int GRID_HEIGHT = 400;
-const int GRAIN_MULTIPLIER = 5;
+const int GRAIN_MULTIPLIER = 10;
 const int GRAIN_SPREAD = 10;
 
 sf::Color HSVtoRGB(float hue, float sat, float val) {
@@ -37,8 +37,6 @@ int main() {
     Hourglass_Grid grid(GRID_WIDTH, GRID_HEIGHT);
     grid.initialize_walls();
 
-    float hue = 1.0f;
-
     sf::RenderWindow window(sf::VideoMode(GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE), "Sandfall");
     sf::RectangleShape cellShape(sf::Vector2f(CELL_SIZE, CELL_SIZE));
 
@@ -63,8 +61,7 @@ int main() {
             timeSinceLastUpdate -= timePerUpdate;
 
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                hue += 0.2f;
-                if (hue >= 360) hue = 1;
+                float hue = Utility::random_int(45, 60);
                 sf::Color color = Utility::HSVtoRGB(hue, 1.0f, 1.0f);
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
