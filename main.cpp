@@ -41,7 +41,7 @@ int main() {
     int grains = 0;
 
     sf::Font font;
-    font.loadFromFile("../assets/font.ttf");
+    font.loadFromFile("assets/font.ttf");
 
     sf::RenderWindow window(sf::VideoMode(GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE), "Sandfall");
     sf::RectangleShape cellShape(sf::Vector2f(CELL_SIZE, CELL_SIZE));
