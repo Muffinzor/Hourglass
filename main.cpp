@@ -73,7 +73,7 @@ int main() {
                     gridY += Utility::random_int(-GRAIN_SPREAD, GRAIN_SPREAD);
 
                     if (gridX >= 0 && gridX < GRID_WIDTH && gridY >= 0 && gridY < GRID_HEIGHT) {
-                        if (grid.get(gridX, gridY) == nullptr) {
+                        if (grid.get(gridX, gridY) == nullptr && !grid.isWall[gridX][gridY]) {
                             grid.set(gridX, gridY, new Grain(color));
                         }
                     }
@@ -89,12 +89,13 @@ int main() {
                     cellShape.setPosition(x * CELL_SIZE, y * CELL_SIZE);
                     cellShape.setFillColor(sf::Color::White);
                     window.draw(cellShape);
-                }
-                Grain* g = grid.get(x, y);
-                if (g != nullptr) {
-                    cellShape.setPosition(x * CELL_SIZE, y * CELL_SIZE);
-                    cellShape.setFillColor(g->color);
-                    window.draw(cellShape);
+                } else {
+                    Grain* g = grid.get(x, y);
+                    if (g != nullptr) {
+                        cellShape.setPosition(x * CELL_SIZE, y * CELL_SIZE);
+                        cellShape.setFillColor(g->color);
+                        window.draw(cellShape);
+                    }
                 }
             }
         }
