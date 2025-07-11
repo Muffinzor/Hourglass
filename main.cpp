@@ -2,10 +2,12 @@
 #include "Hourglass_Grid.h"
 #include "Utility.h"
 
+#include <iostream>
+
 const int CELL_SIZE = 2;
 const int GRID_WIDTH = 400;
 const int GRID_HEIGHT = 400;
-const int GRAIN_MULTIPLIER = 10;
+const int GRAIN_MULTIPLIER = 20;
 const int GRAIN_SPREAD = 10;
 
 sf::Color HSVtoRGB(float hue, float sat, float val) {
@@ -33,27 +35,13 @@ sf::Color HSVtoRGB(float hue, float sat, float val) {
     );
 }
 
-void display_instruction(sf::RenderWindow window) {
-    sf::Font font;
-    font.loadFromFile("arial.ttf");
-
-    sf::Text instructionText;
-    instructionText.setFont(font);
-    instructionText.setString("Press Space to reverse the hourglass");
-    instructionText.setCharacterSize(16);
-    instructionText.setFillColor(sf::Color::White);
-
-    instructionText.setPosition(
-        window.getSize().x / 2.f - instructionText.getLocalBounds().width / 2.f,
-        window.getSize().y - instructionText.getLocalBounds().height - 5
-    );
-
-    window.draw(instructionText);
-}
-
 int main() {
     Hourglass_Grid grid(GRID_WIDTH, GRID_HEIGHT);
     grid.initialize_walls();
+    int grains = 0;
+
+    sf::Font font;
+    font.loadFromFile("../assets/font.ttf");
 
     sf::RenderWindow window(sf::VideoMode(GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE), "Sandfall");
     sf::RectangleShape cellShape(sf::Vector2f(CELL_SIZE, CELL_SIZE));
@@ -90,9 +78,12 @@ int main() {
                     gridX += Utility::random_int(-GRAIN_SPREAD, GRAIN_SPREAD);
                     gridY += Utility::random_int(-GRAIN_SPREAD, GRAIN_SPREAD);
 
-                    if (gridX >= 0 && gridX < GRID_WIDTH && gridY >= 0 && gridY < GRID_HEIGHT) {
+                    if (gridX >= 0 && gridX < GRID_WIDTH
+                        && gridY >= 0 && gridY < GRID_HEIGHT
+                        && grid.is_inside_hourglass(gridX, gridY)) {
                         if (grid.get(gridX, gridY) == nullptr && !grid.isWall[gridX][gridY]) {
                             grid.set(gridX, gridY, new Grain(color));
+                            grains++;
                         }
                     }
                 }
@@ -117,7 +108,8 @@ int main() {
                 }
             }
         }
-
+        Utility::display_instructions(window, font);
+        Utility::display_grain_count(window, font, grains);
         window.display();
     }
 

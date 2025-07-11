@@ -28,6 +28,7 @@ public:
     void updateCell(int x, int y);
     void reset_grains();
     void flip();
+    bool is_inside_hourglass(int x, int y);
     ~Hourglass_Grid();
 };
 
