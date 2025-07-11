@@ -33,6 +33,24 @@ sf::Color HSVtoRGB(float hue, float sat, float val) {
     );
 }
 
+void display_instruction(sf::RenderWindow window) {
+    sf::Font font;
+    font.loadFromFile("arial.ttf");
+
+    sf::Text instructionText;
+    instructionText.setFont(font);
+    instructionText.setString("Press Space to reverse the hourglass");
+    instructionText.setCharacterSize(16);
+    instructionText.setFillColor(sf::Color::White);
+
+    instructionText.setPosition(
+        window.getSize().x / 2.f - instructionText.getLocalBounds().width / 2.f,
+        window.getSize().y - instructionText.getLocalBounds().height - 5
+    );
+
+    window.draw(instructionText);
+}
+
 int main() {
     Hourglass_Grid grid(GRID_WIDTH, GRID_HEIGHT);
     grid.initialize_walls();

@@ -40,6 +40,7 @@ public:
             static_cast<sf::Uint8>(b * 255)
         );
     }
+
 };
 
 
