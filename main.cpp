@@ -68,6 +68,9 @@ int main() {
 
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                if (!grid.is_inside_hourglass(mousePos.x/CELL_SIZE, mousePos.y/CELL_SIZE)) {
+                    continue;
+                }
 
                 for (int i = 0; i < GRAIN_MULTIPLIER; ++i) {
                     int gridX = mousePos.x / CELL_SIZE;
