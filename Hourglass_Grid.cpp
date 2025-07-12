@@ -6,17 +6,18 @@
 #include "Utility.h"
 #include <cmath>
 
+#define THICKNESS 5
+#define FLUIDITY 3
+
 void Hourglass_Grid::initialize_walls() {
     isWall.resize(height, std::vector<bool>(width, false));
 
     float maxMargin = width * 0.35f;
-    float minMargin = width * 0.012f;
+    float minMargin = width * 0.021f;
     int center = width / 2;
 
     int topMargin = static_cast<int>(height * 0.05f);
     int bottomMargin = static_cast<int>(height * 0.95f);
-
-    int thickness = 2;
 
     // Walls
     for (int y = topMargin; y <= bottomMargin; ++y) {
@@ -29,7 +30,7 @@ void Hourglass_Grid::initialize_walls() {
         int left = static_cast<int>(center - margin);
         int right = static_cast<int>(center + margin);
 
-        for (int offset = -thickness; offset <= thickness; ++offset) {
+        for (int offset = -THICKNESS; offset <= THICKNESS; ++offset) {
             int leftPos = left + offset;
             int rightPos = right + offset;
             if (leftPos >= 0 && leftPos < width) {
@@ -43,13 +44,16 @@ void Hourglass_Grid::initialize_walls() {
 
     // Floor + Ceiling
     for (int x = static_cast<int>(width * 0.15f) - 1; x < static_cast<int>(width * 0.85f); ++x) {
-        for (int offset = -thickness; offset <= thickness; ++offset) {
+        for (int offset = -THICKNESS; offset <= THICKNESS; ++offset) {
             int floorX = x + offset;
             if (floorX >= 0 && floorX < width) {
                 isWall[topMargin][floorX] = true;
                 isWall[topMargin+1][floorX] = true;
+                isWall[topMargin+2][floorX] = true;
                 isWall[bottomMargin][floorX] = true;
                 isWall[bottomMargin-1][floorX] = true;
+                isWall[bottomMargin-2][floorX] = true;
+
             }
         }
     }
@@ -137,7 +141,7 @@ void Hourglass_Grid::updateCell(int x, int y) {
                     current->velocity = avg_velocity;
                 }
 
-                const int maxSlide = 2;
+                const int maxSlide = FLUIDITY;
                 bool movedSideways = false;
 
                 for (int slideDist = 1; slideDist <= maxSlide && !movedSideways; ++slideDist) {
