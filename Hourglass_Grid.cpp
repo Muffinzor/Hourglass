@@ -192,7 +192,7 @@ Grain* Hourglass_Grid::get(int x, int y) {
 }
 
 bool Hourglass_Grid::is_inside_hourglass(int x, int y) {
-    if (y < height * 0.05f || y >= height * 0.95f)
+    if (y < height * 0.05f + 3|| y >= height * 0.95f - 3)
         return false;
     int inner_left_wall = -1;
     int inner_right_wall = -1;
